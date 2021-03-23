@@ -6,7 +6,7 @@
 	+	Item botting is a grey area in terms of Roblox's Terms of Service agreement and should not be performed under any circumstance.
 	
 	Licensed under the Academic Free License version 3.0
-  See license.txt for more information on how to use this software
+  	See license.txt for more information on how to use this software
 */
 
 // item asset id blacklist
