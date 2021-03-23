@@ -32,8 +32,8 @@ function buyItem(bestPrice, itemId, name, cursor) {
         var sellerId = info.expectedSellerId;
 
         if (expectedPrice == bestPrice) {
-            console.log('// Found: ' + name + ' for ' + bestPrice);
-			console.group();
+		console.log('// Found: ' + name + ' for ' + bestPrice);
+		console.group();
 
             $.getJSON('https://inventory.roblox.com/v1/users/' + sellerId + '/assets/collectibles?assetType=' + info.assetType + '&sortOrder=Asc&limit=100&cursor=' + cursor, function(uaidData) {
                 var userassetId = [ ];
@@ -47,41 +47,41 @@ function buyItem(bestPrice, itemId, name, cursor) {
                 if (userassetId.length > 0) {
                     $(userassetId).each(function(uaId) {
                         $.post("https://www.roblox.com/API/Item.ashx?rqtype=purchase&productID=" + info.productId + "&expectedCurrency=1&expectedPrice=" + info.expectedPrice + "&expectedSellerID=" + sellerId + "&userAssetID=" + userassetId[uaId], function() {
-                            console.log('// Bought: ' + name + ' for ' + bestPrice);
+				console.log('// Bought: ' + name + ' for ' + bestPrice);
 							
-							setTimeout(function() {
-								$.getJSON('https://economy.roblox.com/v1/assets/' + itemId + '/resale-data', function(rapData) {
-									if (rapData.recentAveragePrice != null) {
-										var avgRap = rapData.recentAveragePrice;
-										var salePrice = Math.floor(avgRap + (avgRap * 0.04));
-                                        var profit = Math.floor((salePrice * 0.7) - bestPrice);
+				setTimeout(function() {
+					$.getJSON('https://economy.roblox.com/v1/assets/' + itemId + '/resale-data', function(rapData) {
+						if (rapData.recentAveragePrice != null) {
+							var avgRap = rapData.recentAveragePrice;
+							var salePrice = Math.floor(avgRap + (avgRap * 0.04));
+                                        		var profit = Math.floor((salePrice * 0.7) - bestPrice);
 
-                                        rapCache[itemId] = avgRap;
-                                        totalProfit += profit;
+                                        		rapCache[itemId] = avgRap;
+                                        		totalProfit += profit;
 
-										$.ajax({
-                                            method: 'PATCH',
-                                            url: 'https://economy.roblox.com/v1/assets/' + itemId + '/resellable-copies/' + uaId,
-                                            data: {
-                                                price: salePrice
-                                            }
-										}).success(function() {
-											var dateTime = new Date();
+							$.ajax({
+							    method: 'PATCH',
+							    url: 'https://economy.roblox.com/v1/assets/' + itemId + '/resellable-copies/' + uaId,
+							    data: {
+								price: salePrice
+							    }
+							}).success(function() {
+								var dateTime = new Date();
 											
-                                            console.log('// [' + dateTime.getHours() + ':' + dateTime.getMinutes() + '] Put on sale: ' + name + ' for ' + salePrice + ' (RAP: ' + avgRap + ') // Profit expected: ' + profit + ' R$');
-                                            console.log('// Total (exp) profit so far: ' + totalProfit);
-											console.groupEnd();
-                                        }).fail(function() {
-											console.warn('// Failed to put item on resale: ' + name);
-											console.groupEnd();
-										});
-									}
-								});
-							}, 3000);
+                                            			console.log('// [' + dateTime.getHours() + ':' + dateTime.getMinutes() + '] Put on sale: ' + name + ' for ' + salePrice + ' (RAP: ' + avgRap + ') // Profit expected: ' + profit + ' R$');
+                                            			console.log('// Total (expected) profit so far: ' + totalProfit);
+								console.groupEnd();
+                                        		}).fail(function() {
+								console.warn('// Failed to put item on resale: ' + name);
+								console.groupEnd();
+							});
+						}
+					});
+				}, 3000);
                         }).fail(function() { 
-							console.warn('// Error when buying item: ' + name);
-							console.groupEnd();
-						});
+				console.warn('// Error when buying item: ' + name);
+				console.groupEnd();
+			});
                     });
                 } else {
                     if (uaidData.nextPageCursor != null) {
@@ -89,7 +89,7 @@ function buyItem(bestPrice, itemId, name, cursor) {
                         buyItem(bestPrice, itemId, name, uaidData.nextPageCursor);
                     } else {
                         console.warn('// Missed: ' + name + ' for ' + bestPrice);
-						console.groupEnd();
+			console.groupEnd();
                     }
                 }
             });
@@ -110,11 +110,11 @@ var next_cursor = '';
 function nextScan() {
 	page = (page == pages) ? 1 : page + 1;
 
-    $.ajax({ dataType: "json", url: 'https://catalog.roblox.com/v1/search/items/detailsCategory=2&Subcategory=2&CurrencyType=3&pxMax=' + maxPrice + '&Cursor=' + next_cursor}).success(function(page, _, xhr) {
-        if (xhr.status != 301) {
-            next_cursor = (page == pages) ? '' : page.nextPageCursor;
+	$.ajax({ dataType: "json", url: 'https://catalog.roblox.com/v1/search/items/detailsCategory=2&Subcategory=2&CurrencyType=3&pxMax=' + maxPrice + '&Cursor=' + next_cursor}).success(function(page, _, xhr) {
+        	if (xhr.status != 301) {
+            		next_cursor = (page == pages) ? '' : page.nextPageCursor;
 
-            $(page.data).each(function(index, itemArray) { 
+            		$(page.data).each(function(index, itemArray) { 
 				$(itemArray).each(function(index, item) {
 					
 					var id = item.id;
@@ -133,10 +133,10 @@ function nextScan() {
 					}
 				}); 
 			});
-        }
+        	}
 
 		nextScan();
-    }).fail(function() { 
+	}).fail(function() { 
 		console.warn('// Failed to fetch catalog. Exiting script'); 
 	});
 }
