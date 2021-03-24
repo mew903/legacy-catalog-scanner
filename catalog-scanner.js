@@ -110,7 +110,7 @@ var next_cursor = '';
 function nextScan() {
 	page = (page == pages) ? 1 : page + 1;
 
-	$.ajax({ dataType: "json", url: 'https://catalog.roblox.com/v1/search/items/detailsCategory=2&Subcategory=2&CurrencyType=3&pxMax=' + maxPrice + '&Cursor=' + next_cursor}).success(function(page, _, xhr) {
+	$.ajax({ dataType: "json", url: 'https://catalog.roblox.com/v1/search/items/details?Category=2&Subcategory=2&CurrencyType=3&pxMax=' + maxPrice + '&Cursor=' + next_cursor}).success(function(page, _, xhr) {
         	if (xhr.status != 301) {
             		next_cursor = (page == pages) ? '' : page.nextPageCursor;
 
